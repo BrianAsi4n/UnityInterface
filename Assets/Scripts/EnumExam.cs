@@ -10,7 +10,6 @@ public enum GameState
     GameOver
 }
 
-
 public class EnumExam : MonoBehaviour
 {
     public GameState CurrentState;

@@ -11,6 +11,11 @@ public enum TargetEnum
     Bottomleft,
     BottomRight,
 }
+public enum DriveMode
+{
+    Manual,
+    Auto,
+}
 
 public class PlayerController : MonoBehaviour
 {
@@ -22,6 +27,7 @@ public class PlayerController : MonoBehaviour
 
     private TargetEnum nextTarget = TargetEnum.TopLeft; // gan trang thai
     private Transform currentTarget;
+    private DriveMode mode = DriveMode.Manual;
 
 
     // Start is called before the first frame update
@@ -34,6 +40,16 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // Hàm Update được gọi mỗi frame
+       if(mode == DriveMode.Auto)
+        {
+            AutoMode();
+        }else if (mode == DriveMode.Manual)
+        {
+            ManualMode();
+        }
+    }
+    void AutoMode()
+    {
         Vector3 targetPosition = currentTarget.position;
         Vector3 moveDirection = targetPosition - transform.position;
         float distance = moveDirection.magnitude;//tính khỏang cách giữa hai điểm
@@ -52,6 +68,16 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = currentTarget.position - transform.position;
         Quaternion targetRotation = Quaternion.LookRotation(direction,Vector3.up);
         transform.rotation = targetRotation;
+    }
+    void ManualMode()
+    {
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        float verticalInput = Input.GetAxisRaw("Vertical");
+        //tinh toan vertor di chuyen dua tren input
+        Vector3 movement = new Vector3(horizontalInput,0f,verticalInput) * Speed * Time.deltaTime;
+        // Ap vi tri
+        transform.Translate(movement);
+        Debug.Log(horizontalInput + ", " + verticalInput);
     }
     void setNextTarget(TargetEnum target)
     {
